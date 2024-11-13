@@ -23,21 +23,24 @@
     cardano-node,
     cardano-wallet,
     ...
-  } @ inputs:
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      overlays = [
+        cardano-node.overlay
+        cardano-wallet.overlay
+      ];
+    };
+  in
     flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux" "aarch64-linux"];
-      perSystem = {system, ...}: let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            cardano-node.overlay
-            cardano-wallet.overlay
-          ];
-        };
-      in {
+      systems = [system];
+      flake = {
         nixosModules = {
           default = import ./modules {inherit inputs pkgs;};
         };
+      };
+      perSystem = {...}: {
+        formatter = pkgs.alejandra;
       };
     };
 
