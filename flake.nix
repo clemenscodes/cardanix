@@ -36,7 +36,9 @@
       systems = [system];
       flake = {
         nixosModules = {
-          default = import ./modules {inherit inputs pkgs;};
+          ${system} = {
+            default = import ./modules {inherit inputs pkgs;};
+          };
         };
       };
       perSystem = {...}: {
