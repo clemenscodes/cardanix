@@ -28,8 +28,19 @@
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
-        cardano-node.overlay
         cardano-wallet.overlay
+        (final: prev: {
+          inherit
+            (cardano-node.legacyPackages.${system})
+            cardano-node
+            cardano-cli
+            cardano-submit-api
+            cardano-tracer
+            locli
+            db-analyser
+            bech32
+            ;
+        })
       ];
     };
   in
