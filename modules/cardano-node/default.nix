@@ -8,7 +8,7 @@ in {
   options = {
     cardano = {
       node = {
-        enable = lib.mkEnableOption "Enable cardano-node" // {default = cfg.enable;};
+        enable = lib.mkEnableOption "Enable cardano-node" // {default = false;};
       };
     };
   };

@@ -11,7 +11,7 @@
   ];
   options = {
     cardano = {
-      enable = lib.mkEnableOption "Enable Cardano development support" // {default = false;};
+      enable = lib.mkEnableOption "Enable Cardano support" // {default = false;};
     };
   };
 }
