@@ -28,8 +28,8 @@
       in {
         enable = true;
         allowedTCPPorts = [443 3001];
-        allowedTCPPortRanges = [allowedPorts];
-        allowedUDPPortRanges = [allowedPorts];
+        # allowedTCPPortRanges = [allowedPorts];
+        # allowedUDPPortRanges = [allowedPorts];
       };
     };
   };
