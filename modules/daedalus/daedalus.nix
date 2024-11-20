@@ -6,11 +6,11 @@
 }: let
   daedalus_ = inputs.daedalus.packages.${system}.default;
   daedalusWrapper = pkgs.writeShellScriptBin "daedalus-wrapper" ''
-    XDG_DATA_HOME="''${XDG_DATA_HOME}:-${home}"
+    XDG_DATA_HOME="''${XDG_DATA_HOME:-${home}}"
     exec ${daedalus_}/bin/daedalus
   '';
   daedalus = pkgs.stdenv.mkDerivation {
-    inherit (daedalus_) name;
+    inherit (daedalus_) pname name version;
     phases = "installPhase";
     installPhase = ''
       mkdir -p $out/{bin,share/applications}
