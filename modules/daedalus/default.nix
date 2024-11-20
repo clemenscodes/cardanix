@@ -14,7 +14,7 @@ in {
       daedalus = {
         enable = lib.mkEnableOption "Enable daedalus" // {default = false;};
         home = lib.mkOption {
-          type = lib.types.path;
+          type = lib.types.str;
           default = "";
         };
       };
