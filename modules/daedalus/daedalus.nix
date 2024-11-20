@@ -10,7 +10,7 @@
     exec ${daedalus_}/bin/daedalus
   '';
   daedalus = pkgs.stdenv.mkDerivation {
-    inherit (daedalus_) pname name version;
+    inherit (daedalus_) name;
     phases = "installPhase";
     installPhase = ''
       mkdir -p $out/{bin,share/applications}
