@@ -20,16 +20,9 @@
   };
   config = lib.mkIf config.cardano.enable {
     networking = {
-      firewall = let
-        allowedPorts = {
-          from = 30000;
-          to = 60000;
-        };
-      in {
+      firewall = {
         enable = true;
         allowedTCPPorts = [443 3001];
-        # allowedTCPPortRanges = [allowedPorts];
-        # allowedUDPPortRanges = [allowedPorts];
       };
     };
   };
