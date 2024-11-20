@@ -2,7 +2,11 @@
   inputs,
   pkgs,
   ...
-}: {lib, ...}: {
+}: {
+  lib,
+  config,
+  ...
+}: {
   imports = [
     (import ./cardano-cli {inherit inputs pkgs;})
     (import ./cardano-node {inherit inputs pkgs;})
@@ -13,6 +17,8 @@
     cardano = {
       enable = lib.mkEnableOption "Enable Cardano support" // {default = false;};
     };
+  };
+  config = lib.mkIf config.cardano.enable {
     networking = {
       firewall = let
         allowedPorts = {
@@ -22,8 +28,8 @@
       in {
         enable = true;
         allowedTCPPorts = [443 3001];
-        # allowedTCPPortRanges = [allowedPorts];
-        # allowedUDPPortRanges = [allowedPorts];
+        allowedTCPPortRanges = [allowedPorts];
+        allowedUDPPortRanges = [allowedPorts];
       };
     };
   };
