@@ -6,7 +6,8 @@
   ...
 }: let
   cfg = config.cardano;
-  daedalus = import ./daedalus.nix {inherit inputs config pkgs system;};
+  inherit (cfg.daedalus) home;
+  daedalus = import ./daedalus.nix {inherit inputs home pkgs system;};
 in {
   options = {
     cardano = {
