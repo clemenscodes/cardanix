@@ -6,7 +6,9 @@
 }: let
   daedalus_ = inputs.daedalus.packages.${system}.default;
   daedalusWrapper = pkgs.writeShellScriptBin "daedalus-wrapper" ''
-    XDG_DATA_HOME="''${${home}:-$XDG_DATA_HOME}"
+    if [ -n "${home}" ]; then
+      XDG_DATA_HOME="${home}"
+    fi
     exec ${daedalus_}/bin/daedalus
   '';
   daedalus = pkgs.stdenv.mkDerivation {
