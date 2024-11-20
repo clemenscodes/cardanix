@@ -23,7 +23,7 @@
   desktopEntry = pkgs.writeText "Daedalus.desktop" ''
     [Desktop Entry]
     Categories=Application;Network
-    Exec=${daedalus}/bin/daedalus
+    Exec=${daedalusWrapper}/bin/daedalus-wrapper
     GenericName=Crypto-Currency Wallet
     Icon=${daedalus_}/share/icon_large.png
     Name=Daedalus mainnet
