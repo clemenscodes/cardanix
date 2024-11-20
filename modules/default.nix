@@ -14,15 +14,16 @@
       enable = lib.mkEnableOption "Enable Cardano support" // {default = false;};
     };
     networking = {
-      firewall = {
+      firewall = let
+        allowedPorts = {
+          from = 30000;
+          to = 60000;
+        };
+      in {
         enable = true;
         allowedTCPPorts = [443 3001];
-        allowedUDPPortRanges = [
-          {
-            from = 30000;
-            to = 60000;
-          }
-        ];
+        allowedTCPPortRanges = [allowedPorts];
+        allowedUDPPortRanges = [allowedPorts];
       };
     };
   };
