@@ -15,7 +15,7 @@ in {
         enable = lib.mkEnableOption "Enable daedalus" // {default = false;};
         home = lib.mkOption {
           type = lib.types.str;
-          default = "";
+          default = "$XDG_DATA_HOME/Daedalus";
         };
       };
     };
