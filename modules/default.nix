@@ -8,6 +8,8 @@
   ...
 }: {
   imports = [
+    (import ./cardano-addresses {inherit inputs pkgs;})
+    (import ./cardano-db-sync {inherit inputs pkgs;})
     (import ./cardano-node {inherit inputs pkgs;})
     (import ./cardano-wallet {inherit inputs pkgs;})
     (import ./daedalus {inherit inputs pkgs;})

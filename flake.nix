@@ -6,6 +6,12 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
+    cardano-addresses = {
+      url = "github:IntersectMBO/cardano-addresses";
+    };
+    cardano-db-sync = {
+      url = "github:IntersectMBO/cardano-db-sync";
+    };
     cardano-node = {
       url = "github:IntersectMBO/cardano-node";
     };
@@ -20,6 +26,8 @@
   outputs = {
     nixpkgs,
     flake-parts,
+    cardano-addresses,
+    cardano-db-sync,
     cardano-node,
     cardano-wallet,
     ...
@@ -28,7 +36,6 @@
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
-        cardano-wallet.overlay
         (final: prev: {
           inherit
             (cardano-node.legacyPackages.${system})
@@ -41,6 +48,7 @@
             bech32
             ;
         })
+        cardano-wallet.overlay
       ];
     };
   in
