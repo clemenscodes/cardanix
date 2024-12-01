@@ -29,9 +29,6 @@ in {
       cardano-db-sync = {
         enable = false;
       };
-      smash = {
-        enable = false;
-      };
     };
   };
 }
