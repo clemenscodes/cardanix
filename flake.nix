@@ -37,6 +37,12 @@
       inherit system;
       overlays = [
         (final: prev: {
+          cardano-address = cardano-addresses.packages.${system}."cardano-addresses-cli:exe:cardano-address";
+        })
+        (final: prev: {
+          cardano-db-sync = cardano-db-sync.packages.${system}.default;
+        })
+        (final: prev: {
           inherit
             (cardano-node.legacyPackages.${system})
             cardano-node

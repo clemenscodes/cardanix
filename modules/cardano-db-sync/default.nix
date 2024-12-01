@@ -22,7 +22,7 @@ in {
   config = lib.mkIf (cfg.enable && cfg.db-sync.enable) {
     environment = {
       systemPackages = [
-        # pkgs.cardano-db-sync
+        pkgs.cardano-db-sync
       ];
     };
     services = {

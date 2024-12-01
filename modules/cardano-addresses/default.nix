@@ -1,8 +1,4 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config,
   lib,
   ...
@@ -11,21 +7,16 @@
 in {
   options = {
     cardano = {
-      addresses = {
-        enable = lib.mkEnableOption "Enable cardano-addresses" // {default = false;};
+      address = {
+        enable = lib.mkEnableOption "Enable cardano-address" // {default = false;};
       };
     };
   };
-  config = lib.mkIf (cfg.enable && cfg.addresses.enable) {
+  config = lib.mkIf (cfg.enable && cfg.address.enable) {
     environment = {
       systemPackages = [
-        # pkgs.cardano-addresses
+        pkgs.cardano-address
       ];
-    };
-    services = {
-      cardano-addresses = {
-        enable = false;
-      };
     };
   };
 }
