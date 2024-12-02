@@ -3,9 +3,6 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-    };
     cardano-addresses = {
       url = "github:IntersectMBO/cardano-addresses";
     };
@@ -28,7 +25,6 @@
 
   outputs = {
     nixpkgs,
-    flake-parts,
     cardano-addresses,
     cardano-db-sync,
     cardano-node,
@@ -36,45 +32,41 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
+    cardano-address-overlay = final: prev: {
+      cardano-address = cardano-addresses.packages.${prev.stdenv.hostPlatform.system}."cardano-addresses-cli:exe:cardano-address";
+    };
+    cardano-db-sync-overlay = final: prev: {
+      cardano-db-sync = cardano-db-sync.packages.${prev.stdenv.hostPlatform.system}.default;
+    };
+    cardano-node-overlay = final: prev: {
+      inherit
+        (cardano-node.legacyPackages.${prev.stdenv.hostPlatform.system})
+        cardano-node
+        cardano-cli
+        cardano-submit-api
+        cardano-tracer
+        locli
+        db-analyser
+        bech32
+        ;
+    };
     overlays = [
-      (final: prev: {
-        cardano-address = cardano-addresses.packages.${system}."cardano-addresses-cli:exe:cardano-address";
-      })
-      (final: prev: {
-        cardano-db-sync = cardano-db-sync.packages.${system}.default;
-      })
-      (final: prev: {
-        inherit
-          (cardano-node.legacyPackages.${system})
-          cardano-node
-          cardano-cli
-          cardano-submit-api
-          cardano-tracer
-          locli
-          db-analyser
-          bech32
-          ;
-      })
+      cardano-address-overlay
+      cardano-db-sync-overlay
+      cardano-node-overlay
       cardano-wallet.overlay
     ];
     pkgs = import nixpkgs {
       inherit system overlays;
     };
-  in
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = [system];
-      flake = {
-        overlays = {
-          ${system} = overlays;
-        };
-        nixosModules = {
-          ${system} = import ./modules {inherit inputs pkgs;};
-        };
-      };
-      perSystem = {...}: {
-        formatter = pkgs.alejandra;
-      };
+  in {
+    overlays = {
+      ${system} = overlays;
     };
+    nixosModules = {
+      ${system} = import ./modules {inherit inputs pkgs;};
+    };
+  };
 
   nixConfig = {
     extra-substituters = [
