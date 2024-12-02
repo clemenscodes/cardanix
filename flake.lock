@@ -775,11 +775,11 @@
         "utils": "utils_3"
       },
       "locked": {
-        "lastModified": 1733151946,
-        "narHash": "sha256-J3ZG6l3M6SVc+HSWqCyfMy0ld0Gtaae9pI67fEJLrho=",
+        "lastModified": 1733152804,
+        "narHash": "sha256-PKURZ0WazZ7FMrn3DsZiy6PXTtV4oK8RseGROWaQ8bY=",
         "owner": "clemenscodes",
         "repo": "cardano-node",
-        "rev": "51bdea59bda3e888bf214fa2b8e82675f152b293",
+        "rev": "1bf5fa387a63741f30fee799c29cf0c188c983c1",
         "type": "github"
       },
       "original": {
