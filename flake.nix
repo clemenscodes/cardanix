@@ -12,8 +12,11 @@
     cardano-db-sync = {
       url = "github:IntersectMBO/cardano-db-sync";
     };
+    # cardano-node = {
+    #   url = "github:IntersectMBO/cardano-node/10.1.3";
+    # };
     cardano-node = {
-      url = "github:IntersectMBO/cardano-node/10.1.3";
+      url = "github:clemenscodes/cardano-node/feature/custom-state-dir";
     };
     cardano-wallet = {
       url = "github:cardano-foundation/cardano-wallet";
