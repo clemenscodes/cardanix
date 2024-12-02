@@ -36,34 +36,37 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
+    overlays = [
+      (final: prev: {
+        cardano-address = cardano-addresses.packages.${system}."cardano-addresses-cli:exe:cardano-address";
+      })
+      (final: prev: {
+        cardano-db-sync = cardano-db-sync.packages.${system}.default;
+      })
+      (final: prev: {
+        inherit
+          (cardano-node.legacyPackages.${system})
+          cardano-node
+          cardano-cli
+          cardano-submit-api
+          cardano-tracer
+          locli
+          db-analyser
+          bech32
+          ;
+      })
+      cardano-wallet.overlay
+    ];
     pkgs = import nixpkgs {
-      inherit system;
-      overlays = [
-        (final: prev: {
-          cardano-address = cardano-addresses.packages.${system}."cardano-addresses-cli:exe:cardano-address";
-        })
-        (final: prev: {
-          cardano-db-sync = cardano-db-sync.packages.${system}.default;
-        })
-        (final: prev: {
-          inherit
-            (cardano-node.legacyPackages.${system})
-            cardano-node
-            cardano-cli
-            cardano-submit-api
-            cardano-tracer
-            locli
-            db-analyser
-            bech32
-            ;
-        })
-        cardano-wallet.overlay
-      ];
+      inherit system overlays;
     };
   in
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [system];
       flake = {
+        overlays = {
+          ${system} = overlays;
+        };
         nixosModules = {
           ${system} = import ./modules {inherit inputs pkgs;};
         };
