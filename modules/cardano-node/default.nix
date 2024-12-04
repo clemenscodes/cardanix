@@ -54,7 +54,8 @@ in {
     systemd = {
       tmpfiles = {
         rules = [
-          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0770 cardano-node cardano-node -"
+          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0775 cardano-node cardano-node -"
+          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}/${config.services.cardano-node.dbPrefix config.services.cardano-node.nodeId}/${config.services.cardano-wallet.database} 0775 cardano-node cardano-node -"
         ];
       };
       services = {
