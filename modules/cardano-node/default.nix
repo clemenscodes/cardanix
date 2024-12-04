@@ -36,9 +36,9 @@ in {
         pkgs.bech32
       ];
       variables = {
-        CARDANO_NODE_SOCKET_PATH = "${socketPath}";
-        CARDANO_NODE_NETWORK_ID = "${networkMagic}";
-        TESTNET_MAGIC = "${networkMagic}";
+        CARDANO_NODE_SOCKET_PATH = socketPath;
+        CARDANO_NODE_NETWORK_ID = networkMagic;
+        TESTNET_MAGIC = networkMagic;
       };
     };
     services = {

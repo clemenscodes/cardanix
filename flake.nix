@@ -37,15 +37,20 @@
     };
     cardano-node-overlay = final: prev: {
       inherit
-        (cardano-node.legacyPackages.${prev.stdenv.hostPlatform.system})
+        (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
         cardano-node
         cardano-cli
+        cardano-address
+        bech32
+        ;
+      inherit
+        (cardano-node.legacyPackages.${prev.stdenv.hostPlatform.system})
         cardano-submit-api
         cardano-tracer
         locli
         db-analyser
-        bech32
         ;
+
     };
     overlays = [
       cardano-address-overlay
