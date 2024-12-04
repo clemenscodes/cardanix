@@ -23,7 +23,7 @@
     networking = {
       firewall = {
         enable = true;
-        allowedTCPPorts = [443 3001];
+        allowedTCPPorts = [3001];
       };
     };
   };
