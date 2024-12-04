@@ -9,6 +9,7 @@
 }: let
   cfg = config.cardano;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.environment}.nodeConfig.ShelleyGenesisFile);
+  inherit (shelleyGenesisFile) networkMagic;
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {
@@ -34,9 +35,9 @@ in {
         pkgs.bech32
       ];
       variables = {
-        CARDANO_NODE_SOCKET_PATH = "${cfg.stateDir}/node.socket";
-        CARDANO_NODE_NETWORK_ID = "${shelleyGenesisFile.networkMagic}";
-        TESTNET_MAGIC = "${shelleyGenesisFile.networkMagic}";
+        CARDANO_NODE_SOCKET_PATH = "${cfg.socketPath}";
+        CARDANO_NODE_NETWORK_ID = "${networkMagic}";
+        TESTNET_MAGIC = "${networkMagic}";
       };
     };
     services = {
@@ -58,8 +59,8 @@ in {
           };
           postStart = ''
             while true; do
-              if [ -S /run/cardano-node/node.socket ]; then
-                chmod go+w /run/cardano-node/node.socket
+              if [ -S ${cfg.socketpath} ]; then
+                chmod go+w ${cfg.socketPath}
                 exit 0
               fi
               sleep 5
