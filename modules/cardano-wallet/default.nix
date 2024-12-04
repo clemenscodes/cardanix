@@ -52,14 +52,15 @@ in {
       };
       services = {
         cardano-wallet = {
-          requires = ["cardano-node.service"];
-          partOf = ["cardano-node.service"];
+          after = ["cardano-node.service"];
           serviceConfig = {
-            DynamicUser = lib.mkForce false;
+            DynamicUser = lib.mkForce null;
+            WorkingDirectory = walletHome;
             User = "cardano-node";
             Group = "cardano-node";
+            TimeoutStartSec = "infinity";
             Restart = "always";
-            WorkingDirectory = walletHome;
+            RestartSec = 1;
           };
         };
       };
