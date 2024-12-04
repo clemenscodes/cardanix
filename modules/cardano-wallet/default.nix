@@ -16,7 +16,7 @@
     metadataUrl
     smashUrl
     ;
-  walletHome = "${stateDirBase}${cfg.node.environment}/${config.services.cardano-wallet.database}";
+  walletHome = "${stateDirBase}${config.services.cardano-wallet.database}/${cfg.node.environment}";
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -45,10 +45,16 @@ in {
       };
     };
     systemd = {
-      tmpfiles = {
-        rules = [
-          "d ${walletHome} 0664 cardano-node cardano-node -"
-        ];
+      user = {
+        tmpfiles = {
+          users = {
+            cardano-node = {
+              rules = [
+                "d ${walletHome} 0664 cardano-node cardano-node -"
+              ];
+            };
+          };
+        };
       };
       services = {
         cardano-wallet = {

@@ -52,10 +52,16 @@ in {
       };
     };
     systemd = {
-      tmpfiles = {
-        rules = [
-          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0664 cardano-node cardano-node -"
-        ];
+      user = {
+        tmpfiles = {
+          users = {
+            cardano-node = {
+              rules = [
+                "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0664 cardano-node cardano-node -"
+              ];
+            };
+          };
+        };
       };
       services = {
         cardano-node = {
