@@ -19,8 +19,8 @@
   walletHome = "${stateDirBase}${config.services.cardano-wallet.database}/${cfg.node.environment}";
   cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
     mkdir -p ${walletHome}
-    chown -R cardano-node:cardano-node ${walletHome}
-    chmod -R 0644 ${walletHome}
+    chown -R cardano-node:cardano-node ${stateDirBase}${config.services.cardano-wallet.database}
+    chmod -R 0644 ${stateDirBase}${config.services.cardano-wallet.database}
   '';
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
