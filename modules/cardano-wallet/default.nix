@@ -9,14 +9,14 @@
 }: let
   cfg = config.cardano;
   inherit (config.services) cardano-node;
-  inherit (cardano-node) nodeId socketPath;
-  stateDir = cardano-node.stateDir nodeId;
+  inherit (cardano-node) nodeId socketPath stateDir dbPrefix;
   inherit
     (inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment})
     networkConfig
     metadataUrl
     smashUrl
     ;
+  walletHome = "${stateDir nodeId}${dbPrefix nodeId}/${config.services.cardano-wallet.database}";
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -37,7 +37,6 @@ in {
           if cfg.node.environment != "mainnet"
           then networkConfig.ByronGenesisFile
           else null;
-        database = lib.removePrefix stateDir;
         poolMetadataFetching = {
           inherit (cfg.wallet) enable;
           inherit smashUrl;
@@ -45,10 +44,19 @@ in {
         tokenMetadataServer = metadataUrl;
       };
     };
+    systemd = {
+      services = {
+        cardano-wallet = {
+          serviceConfig = {
+            WorkingDirectory = walletHome;
+          };
+        };
+      };
+    };
     environment = {
       systemPackages = [pkgs.cardano-wallet];
       variables = {
-        STATE_DIR = stateDir;
+        STATE_DIR = walletHome;
       };
     };
   };
