@@ -52,6 +52,11 @@ in {
       };
     };
     systemd = {
+      tmpfiles = {
+        rules = [
+          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0660 cardano-node cardano-node -"
+        ];
+      };
       services = {
         cardano-node = {
           serviceConfig = {

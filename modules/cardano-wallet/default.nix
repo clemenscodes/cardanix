@@ -45,9 +45,20 @@ in {
       };
     };
     systemd = {
+      tmpfiles = {
+        rules = [
+          "d ${walletHome} 0660 cardano-node cardano-node -"
+        ];
+      };
       services = {
         cardano-wallet = {
+          requires = ["cardano-node.service"];
+          partOf = ["cardano-node.service"];
           serviceConfig = {
+            DynamicUser = lib.mkForce false;
+            User = "cardano-node";
+            Group = "cardano-node";
+            Restart = "always";
             WorkingDirectory = walletHome;
           };
         };
