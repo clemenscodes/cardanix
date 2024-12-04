@@ -58,6 +58,7 @@ in {
         };
         cardano-wallet = {
           after = ["cardano-node.service"];
+          wantedBy = ["multi-user.target"];
           serviceConfig = {
             DynamicUser = lib.mkForce "no";
             WorkingDirectory = walletHome;
