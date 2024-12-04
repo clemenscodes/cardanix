@@ -54,7 +54,7 @@ in {
             User = "cardano-node";
             Group = "cardano-node";
             ExecStart = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
-              mkdir -p ${walletHome}"
+              mkdir -p ${walletHome}
             '';
           };
         };
