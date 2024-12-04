@@ -57,6 +57,7 @@ in {
           users = {
             cardano-node = {
               rules = [
+                "d ${config.serices.cardano-node.stateDirBase} 0664 cardano-node cardano-node -"
                 "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0664 cardano-node cardano-node -"
               ];
             };
