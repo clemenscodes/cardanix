@@ -8,7 +8,9 @@
   ...
 }: let
   cfg = config.cardano;
-  stateDir = cfg.node.stateDir config.services.cardano-node.nodeId;
+  inherit (config.services) cardano-node;
+  inherit (cardano-node) nodeId socketPath;
+  stateDir = cardano-node.stateDir nodeId;
   inherit
     (inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment})
     networkConfig
@@ -30,12 +32,12 @@ in {
         inherit (cfg.wallet) enable;
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
-        nodeSocket = config.services.cardano-node.socketPath config.services.cardano-node.nodeId;
+        nodeSocket = socketPath nodeId;
         genesisFile =
           if cfg.node.environment != "mainnet"
           then networkConfig.ByronGenesisFile
           else null;
-        database = lib.removePrefix cfg.node.stateDirBase stateDir;
+        database = lib.removePrefix stateDir;
         poolMetadataFetching = {
           inherit (cfg.wallet) enable;
           inherit smashUrl;
