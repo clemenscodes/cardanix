@@ -54,7 +54,7 @@ in {
         cardano-wallet = {
           after = ["cardano-node.service"];
           serviceConfig = {
-            DynamicUser = lib.mkForce false;
+            DynamicUser = lib.mkForce "no";
             WorkingDirectory = walletHome;
             User = "cardano-node";
             Group = "cardano-node";
