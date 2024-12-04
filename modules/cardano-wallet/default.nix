@@ -45,17 +45,6 @@ in {
       };
     };
     systemd = {
-      user = {
-        tmpfiles = {
-          users = {
-            cardano-node = {
-              rules = [
-                "d ${walletHome} 0664 cardano-node cardano-node -"
-              ];
-            };
-          };
-        };
-      };
       services = {
         cardano-wallet = {
           after = ["cardano-node.service"];
