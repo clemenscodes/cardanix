@@ -17,6 +17,9 @@
     smashUrl
     ;
   walletHome = "${stateDirBase}${config.services.cardano-wallet.database}/${cfg.node.environment}";
+  cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
+    mkdir -p ${walletHome}
+  '';
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -53,9 +56,7 @@ in {
             Type = "oneshot";
             User = "cardano-node";
             Group = "cardano-node";
-            ExecStart = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
-              mkdir -p ${walletHome}
-            '';
+            ExecStart = lib.getExe cardano-wallet-fs;
           };
         };
         cardano-wallet = {

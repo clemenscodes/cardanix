@@ -11,6 +11,9 @@
   socketPath = config.services.cardano-node.socketPath config.services.cardano-node.nodeId;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment}.nodeConfig.ShelleyGenesisFile);
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
+  cardano-node-fs = pkgs.writeShellScriptBin "cardano-node-fs" ''
+    mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
+  '';
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {
@@ -61,9 +64,7 @@ in {
             Type = "oneshot";
             User = "cardano-node";
             Group = "cardano-node";
-            ExecStart = pkgs.writeShellScriptBin "cardano-node-fs" ''
-              mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
-            '';
+            ExecStart = lib.getExe cardano-node-fs;
           };
         };
         cardano-node = {
