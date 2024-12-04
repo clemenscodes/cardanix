@@ -8,8 +8,8 @@
   ...
 }: let
   cfg = config.cardano;
+  socketPath = config.services.cardano-node.socketPath config.services.cardano-node.nodeId;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.environment}.nodeConfig.ShelleyGenesisFile);
-  inherit (config.services.cardano-node) socketPath;
   inherit (shelleyGenesisFile) networkMagic;
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
