@@ -9,14 +9,14 @@
 }: let
   cfg = config.cardano;
   inherit (config.services) cardano-node;
-  inherit (cardano-node) nodeId socketPath stateDir dbPrefix;
+  inherit (cardano-node) nodeId socketPath stateDirBase;
   inherit
     (inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment})
     networkConfig
     metadataUrl
     smashUrl
     ;
-  walletHome = "${stateDir nodeId}/${dbPrefix nodeId}/${config.services.cardano-wallet.database}";
+  walletHome = "${stateDirBase}${cfg.node.environment}/${config.services.cardano-wallet.database}";
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -47,8 +47,7 @@ in {
     systemd = {
       tmpfiles = {
         rules = [
-          "d ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId} 0775 cardano-node cardano-node -"
-          "d ${walletHome} 0775 cardano-node cardano-node -"
+          "d ${walletHome} 0664 cardano-node cardano-node -"
         ];
       };
       services = {
