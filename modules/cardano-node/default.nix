@@ -8,21 +8,16 @@
   ...
 }: let
   cfg = config.cardano;
+  shelleyGenesisFile = builtins.fromJSON (builtins.readFile inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.environment}.nodeConfig.ShelleyGenesisFile);
 in {
-  imports = [
-    inputs.cardano-node.nixosModules.cardano-node
-    inputs.cardano-node.nixosModules.cardano-submit-api
-  ];
+  imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {
     cardano = {
       node = {
         enable = lib.mkEnableOption "Enable cardano-node" // {default = false;};
-        port = lib.mkOption {
-          type = lib.types.either lib.types.int lib.types.str;
-          default = 3001;
-          description = ''
-            The port number
-          '';
+        environment = lib.mkOption {
+          type = lib.types.enum ["mainnet" "preprod" "preview" "sanchonet"];
+          default = "mainnet";
         };
       };
     };
@@ -38,56 +33,39 @@ in {
         pkgs.db-analyser
         pkgs.bech32
       ];
-    };
-    networking = {
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [cfg.node.port];
+      variables = {
+        CARDANO_NODE_SOCKET_PATH = "${cfg.stateDir}/node.socket";
+        CARDANO_NODE_NETWORK_ID = "${shelleyGenesisFile.networkMagic}";
+        TESTNET_MAGIC = "${shelleyGenesisFile.networkMagic}";
       };
     };
     services = {
       cardano-node = {
-        inherit (cfg.node) enable port;
-        instances = 1;
+        inherit (cfg.node) enable port environment;
         hostAddr = "0.0.0.0";
-        environment = "preview";
-        dbPrefix = "db";
-        socketGroup = "cardano-node";
-        # stateDirBase = "/mnt/ext4/crypto/cardano/";
-        # runDirBase = "/mnt/ext4/crypto/cardano/";
-        # profiling = "none";
-        # eventlog = false;
-        # asserts = false;
-        # isProducer = false;
-        # signingKey = null;
-        # delegationCertificate = null;
-        # kesKey = null;
-        # vrfKey = null;
-        # operationalCertificate = null;
-        # systemdSocketActivation = false;
-        # extraServiceConfig = _: {};
-        # extraSocketConfig = _: {};
-        # nodeId = 0;
-        # publicProducers = [];
-        # instancePublicProducers = _: [];
-        # producers = [];
-        # instanceProducers = _: [];
-        # useNewTopology = false;
-        # useLegacyTracing = true;
-        # usePeersFromLedgerAfterSlot = null;
-        # bootstrapPeers = null;
-        # topology = null;
-        # useSystemdReload = false;
-        # extraNodeConfig = {};
-        # extraNodeInstanceConfig = _: {};
-        # nodeConfigFile = null;
-        # forceHardForks = {};
-        # withCardanoTracer = false;
-        # withUtxoHdLmdb = false;
-        # extraArgs = [];
+        useNewTopology = true;
       };
       cardano-submit-api = {
         enable = false;
+      };
+    };
+    systemd = {
+      services = {
+        cardano-node = {
+          wantedBy = lib.mkForce [];
+          serviceConfig = {
+            TimeoutStartSec = "infinity";
+          };
+          postStart = ''
+            while true; do
+              if [ -S /run/cardano-node/node.socket ]; then
+                chmod go+w /run/cardano-node/node.socket
+                exit 0
+              fi
+              sleep 5
+            done
+          '';
+        };
       };
     };
   };

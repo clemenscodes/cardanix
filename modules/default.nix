@@ -2,11 +2,7 @@
   inputs,
   pkgs,
   ...
-}: {
-  lib,
-  config,
-  ...
-}: {
+}: {lib, ...}: {
   imports = [
     (import ./cardano-addresses {inherit inputs pkgs;})
     (import ./cardano-db-sync {inherit inputs pkgs;})
@@ -17,14 +13,6 @@
   options = {
     cardano = {
       enable = lib.mkEnableOption "Enable Cardano support" // {default = false;};
-    };
-  };
-  config = lib.mkIf config.cardano.enable {
-    networking = {
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [3001];
-      };
     };
   };
 }
