@@ -16,7 +16,7 @@
     metadataUrl
     smashUrl
     ;
-  walletHome = "${stateDir nodeId}${dbPrefix nodeId}/${config.services.cardano-wallet.database}";
+  walletHome = "${stateDir nodeId}/${dbPrefix nodeId}/${config.services.cardano-wallet.database}";
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -67,7 +67,7 @@ in {
     environment = {
       systemPackages = [pkgs.cardano-wallet];
       variables = {
-        STATE_DIR = walletHome;
+        STATE_DIRECTORY = walletHome;
       };
     };
   };
