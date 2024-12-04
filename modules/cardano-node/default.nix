@@ -13,6 +13,8 @@
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
   cardano-node-fs = pkgs.writeShellScriptBin "cardano-node-fs" ''
     mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
+    chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDir}
+    chmod -R 0644 ${config.services.cardano-node.stateDir}
   '';
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
@@ -62,8 +64,6 @@ in {
           wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
-            User = "cardano-node";
-            Group = "cardano-node";
             ExecStart = lib.getExe cardano-node-fs;
           };
         };
