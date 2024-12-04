@@ -53,7 +53,9 @@ in {
             Type = "oneshot";
             User = "cardano-node";
             Group = "cardano-node";
-            ExecStart = "mkdir -p ${walletHome}";
+            ExecStart = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
+              mkdir -p ${walletHome}"
+            '';
           };
         };
         cardano-wallet = {

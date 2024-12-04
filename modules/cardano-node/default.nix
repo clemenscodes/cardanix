@@ -61,7 +61,9 @@ in {
             Type = "oneshot";
             User = "cardano-node";
             Group = "cardano-node";
-            ExecStart = "mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}";
+            ExecStart = pkgs.writeShellScriptBin "cardano-node-fs" ''
+              mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}"
+            '';
           };
         };
         cardano-node = {
