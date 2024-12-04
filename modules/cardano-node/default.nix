@@ -54,7 +54,6 @@ in {
     systemd = {
       services = {
         cardano-node = {
-          wantedBy = lib.mkForce [];
           serviceConfig = {
             TimeoutStartSec = "infinity";
           };
