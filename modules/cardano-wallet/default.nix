@@ -47,7 +47,7 @@ in {
     systemd = {
       tmpfiles = {
         rules = [
-          "d ${walletHome} 0660 cardano-node cardano-node -"
+          "d ${walletHome} 0770 cardano-node cardano-node -"
         ];
       };
       services = {
