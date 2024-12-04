@@ -60,7 +60,7 @@ in {
             Type = "oneshot";
             User = "cardano-node";
             Group = "cardano-node";
-            ExecStart = "mkdir -p ${config.services.cardano-node.stateDir}";
+            ExecStart = "mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}";
           };
         };
         cardano-node = {
