@@ -52,12 +52,10 @@ in {
     systemd = {
       services = {
         cardano-wallet-fs = {
-          after = ["local-fs.target"];
-          before = ["cardano-node.service"];
+          after = ["cardano-node.service"];
+          wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
-            User = "cardano-node";
-            Group = "cardano-node";
             ExecStart = lib.getExe cardano-wallet-fs;
           };
         };
