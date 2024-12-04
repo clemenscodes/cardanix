@@ -56,6 +56,7 @@ in {
         cardano-node-fs = {
           after = ["local-fs.target"];
           before = ["cardano-node.service"];
+          wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
             User = "cardano-node";
