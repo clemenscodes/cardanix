@@ -42,7 +42,7 @@ in {
     };
     services = {
       cardano-node = {
-        inherit (cfg.node) enable port environment;
+        inherit (cfg.node) enable environment;
         hostAddr = "0.0.0.0";
         useNewTopology = true;
       };
