@@ -46,6 +46,16 @@ in {
     };
     systemd = {
       services = {
+        cardano-wallet-fs = {
+          after = ["local-fs.target"];
+          before = ["cardano-node.service"];
+          serviceConfig = {
+            Type = "oneshot";
+            User = "cardano-node";
+            Group = "cardano-node";
+            ExecStart = "mkdir -p ${walletHome}";
+          };
+        };
         cardano-wallet = {
           after = ["cardano-node.service"];
           serviceConfig = {

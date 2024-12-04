@@ -52,12 +52,17 @@ in {
       };
     };
     systemd = {
-      tmpfiles = {
-        rules = [
-          "d ${config.services.cardano-node.stateDirBase} 0664 cardano-node cardano-node - - mkdir -p %{P}/${config.services.cardano-node.stateDirBase}/cardano-node %{P}/${config.services.cardano-wallet.database}/${cfg.node.environment}"
-        ];
-      };
       services = {
+        cardano-node-fs = {
+          after = ["local-fs.target"];
+          before = ["cardano-node.service"];
+          serviceConfig = {
+            Type = "oneshot";
+            User = "cardano-node";
+            Group = "cardano-node";
+            ExecStart = "mkdir -p ${config.services.cardano-node.stateDir}";
+          };
+        };
         cardano-node = {
           serviceConfig = {
             TimeoutStartSec = "infinity";
