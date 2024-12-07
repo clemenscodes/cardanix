@@ -13,7 +13,7 @@
       url = "github:IntersectMBO/cardano-node";
     };
     cardano-wallet = {
-      url = "github:cardano-foundation/cardano-wallet";
+      url = "github:cardano-foundation/cardano-wallet/v2024-11-18";
     };
     daedalus = {
       url = "github:input-output-hk/daedalus";
@@ -50,7 +50,6 @@
         locli
         db-analyser
         ;
-
     };
     overlays = [
       cardano-address-overlay
@@ -67,6 +66,16 @@
     };
     nixosModules = {
       ${system} = import ./modules {inherit inputs pkgs;};
+    };
+    devShells = {
+      ${system} = {
+        default = pkgs.mkShell {
+          buildInputs = [
+            pkgs.cardano-node
+            pkgs.cardano-wallet
+          ];
+        };
+      };
     };
   };
 
