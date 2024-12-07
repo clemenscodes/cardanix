@@ -12,9 +12,24 @@
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment}.nodeConfig.ShelleyGenesisFile);
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
   cardano-node-fs = pkgs.writeShellScriptBin "cardano-node-fs" ''
-    mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
-    chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDirBase}
-    chmod -R 0755 ${config.services.cardano-node.stateDirBase}
+    if [ ! -d "${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}" ]; then
+      mkdir -p ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
+    fi
+
+    current_owner=$(stat -c '%U:%G' "${config.services.cardano-node.stateDirBase}" 2>/dev/null)
+
+    if [ "$current_owner" != "cardano-node:cardano-node" ]; then
+      chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDirBase}
+    fi
+
+    current_perms=$(stat -c '%a' "${config.services.cardano-node.stateDirBase}" 2>/dev/null)
+    if [ "$current_perms" != "755" ]; then
+        chmod -R 0755 ${config.services.cardano-node.stateDirBase}
+    fi
+
+    if [ -S ${socketPath} ]; then
+      chmod 660 ${socketPath}
+    fi
   '';
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
@@ -67,6 +82,7 @@ in {
           };
           postStart = ''
             while true; do
+              echo "Running post start cardano node..." > /home/clay/debug.txt
               if [ -S ${socketPath} ]; then
                 chmod 660 ${socketPath}
                 exit 0

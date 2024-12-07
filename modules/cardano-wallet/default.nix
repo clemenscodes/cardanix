@@ -18,9 +18,20 @@
     ;
   walletHome = "${stateDirBase}${config.services.cardano-wallet.database}/${cfg.node.environment}";
   cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
-    mkdir -p ${walletHome}
+    if [ ! -d "${walletHome}" ]; then
+      mkdir -p ${walletHome}
+    fi
+
+    current_owner=$(stat -c '%U:%G' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
+
+    if [ "$current_owner" != "cardano-node:cardano-node" ]; then
     chown -R cardano-node:cardano-node ${stateDirBase}${config.services.cardano-wallet.database}
-    chmod -R 0755 ${stateDirBase}${config.services.cardano-wallet.database}
+    fi
+
+    current_perms=$(stat -c '%a' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
+    if [ "$current_perms" != "755" ]; then
+      chmod -R 0755 ${stateDirBase}${config.services.cardano-wallet.database}
+    fi
   '';
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
