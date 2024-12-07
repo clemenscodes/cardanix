@@ -84,11 +84,8 @@ in {
             while true; do
               if [ -S ${socketPath} ]; then
                 current_perms=$(stat -c '%a' "${socketPath}" 2>/dev/null)
-                if [ "$current_perms" != "755" ]; then
-                  chmod 660 ${socketPath}
-                  exit 0
-                fi
                 if [ "$current_perms" != "660" ]; then
+                  chmod 660 ${socketPath}
                   exit 0
                 fi
               fi
