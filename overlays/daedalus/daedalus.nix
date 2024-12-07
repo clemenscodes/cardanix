@@ -1,10 +1,10 @@
 {
   inputs,
-  home,
   pkgs,
-  system,
+  home ? "$XDG_DATA_HOME/Daedalus",
+  ...
 }: let
-  daedalus_ = inputs.daedalus.packages.${system}.default;
+  daedalus_ = inputs.daedalus.packages.${pkgs.stdenv.hostPlatform.system}.default;
   daedalusWrapper = pkgs.writeShellScriptBin "daedalus-wrapper" ''
     if [ -n "${home}" ]; then
       XDG_DATA_HOME="${home}"

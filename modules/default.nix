@@ -4,7 +4,9 @@
   ...
 }: {lib, ...}: {
   imports = [
+    (import ./bech32 {inherit inputs pkgs;})
     (import ./cardano-addresses {inherit inputs pkgs;})
+    (import ./cardano-cli {inherit inputs pkgs;})
     (import ./cardano-db-sync {inherit inputs pkgs;})
     (import ./cardano-node {inherit inputs pkgs;})
     (import ./cardano-wallet {inherit inputs pkgs;})

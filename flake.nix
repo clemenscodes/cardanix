@@ -3,8 +3,11 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
+    bech32 = {
+      url = "github:IntersectMBO/bech32/v1.1.7";
+    };
     cardano-addresses = {
-      url = "github:IntersectMBO/cardano-addresses/3.12.0";
+      url = "github:IntersectMBO/cardano-addresses";
     };
     cardano-db-sync = {
       url = "github:IntersectMBO/cardano-db-sync/13.6.0.4";
@@ -14,6 +17,9 @@
       # TODO: lock to 10.2.0 as soon as it is released
       url = "github:IntersectMBO/cardano-node/master";
     };
+    cardano-cli = {
+      url = "github:IntersectMBO/cardano-cli/cardano-cli-10.1.1.0";
+    };
     cardano-wallet = {
       url = "github:cardano-foundation/cardano-wallet/v2024-11-18";
     };
@@ -22,43 +28,9 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    cardano-addresses,
-    cardano-db-sync,
-    cardano-node,
-    cardano-wallet,
-    ...
-  } @ inputs: let
+  outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
-    cardano-address-overlay = final: prev: {
-      cardano-address = cardano-addresses.packages.${prev.stdenv.hostPlatform.system}."cardano-addresses-cli:exe:cardano-address";
-    };
-    cardano-db-sync-overlay = final: prev: {
-      cardano-db-sync = cardano-db-sync.packages.${prev.stdenv.hostPlatform.system}.default;
-    };
-    cardano-node-overlay = final: prev: {
-      inherit
-        (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
-        cardano-node
-        cardano-cli
-        cardano-address
-        bech32
-        ;
-      inherit
-        (cardano-node.legacyPackages.${prev.stdenv.hostPlatform.system})
-        cardano-submit-api
-        cardano-tracer
-        locli
-        db-analyser
-        ;
-    };
-    overlays = [
-      cardano-address-overlay
-      cardano-db-sync-overlay
-      cardano-node-overlay
-      cardano-wallet.overlay
-    ];
+    overlays = import ./overlays {inherit inputs;};
     pkgs = import nixpkgs {
       inherit system overlays;
     };
@@ -73,8 +45,13 @@
       ${system} = {
         default = pkgs.mkShell {
           buildInputs = [
+            pkgs.bech32
+            pkgs.cardano-address
             pkgs.cardano-node
+            pkgs.cardano-cli
             pkgs.cardano-wallet
+            pkgs.cardano-db-sync
+            pkgs.daedalus
           ];
         };
       };

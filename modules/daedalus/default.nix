@@ -1,13 +1,18 @@
-{inputs, ...}: {
-  system,
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   config,
   lib,
-  pkgs,
   ...
 }: let
   cfg = config.cardano;
   inherit (cfg.daedalus) home;
-  daedalus = import ./daedalus.nix {inherit inputs home pkgs system;};
+  daedalusPkgs = import inputs.nixpkgs {
+    inherit (pkgs.stdenv.hostPlatform) system;
+    overlays = [(import ../../overlays/daedalus {inherit inputs pkgs home;})];
+  };
 in {
   options = {
     cardano = {
@@ -22,7 +27,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.daedalus.enable) {
     environment = {
-      systemPackages = [daedalus];
+      systemPackages = [daedalusPkgs.daedalus];
     };
   };
 }
