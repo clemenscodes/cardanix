@@ -83,8 +83,14 @@ in {
           postStart = ''
             while true; do
               if [ -S ${socketPath} ]; then
-                chmod 660 ${socketPath}
-                exit 0
+                current_perms=$(stat -c '%a' "${socketPath}" 2>/dev/null)
+                if [ "$current_perms" != "755" ]; then
+                  chmod 660 ${socketPath}
+                  exit 0
+                fi
+                if [ "$current_perms" != "660" ]; then
+                  exit 0
+                fi
               fi
               sleep 5
             done
