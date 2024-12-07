@@ -45,6 +45,7 @@ in {
         inherit (cfg.node) enable environment;
         hostAddr = "0.0.0.0";
         useNewTopology = true;
+        systemdSocketActivation = true;
       };
       cardano-submit-api = {
         enable = false;
