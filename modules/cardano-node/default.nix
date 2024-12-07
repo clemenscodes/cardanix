@@ -82,7 +82,6 @@ in {
           };
           postStart = ''
             while true; do
-              echo "Running post start cardano node..." > /home/clay/debug.txt
               if [ -S ${socketPath} ]; then
                 chmod 660 ${socketPath}
                 exit 0
