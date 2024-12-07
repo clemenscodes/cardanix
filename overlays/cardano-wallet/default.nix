@@ -1,6 +1,1 @@
-{inputs, ...}: final: prev: {
-  inherit
-    (inputs.cardano-wallet.packages.${prev.stdenv.hostPlatform.system})
-    cardano-wallet
-    ;
-}
+{inputs, ...}: inputs.cardano-wallet.overlay
