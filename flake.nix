@@ -4,19 +4,21 @@
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
     cardano-addresses = {
-      url = "github:IntersectMBO/cardano-addresses";
+      url = "github:IntersectMBO/cardano-addresses/3.12.0";
     };
     cardano-db-sync = {
-      url = "github:IntersectMBO/cardano-db-sync";
+      url = "github:IntersectMBO/cardano-db-sync/13.6.0.4";
     };
     cardano-node = {
-      url = "github:IntersectMBO/cardano-node";
+      # master contains fix for custom state dirs
+      # TODO: lock to 10.2.0 as soon as it is released
+      url = "github:IntersectMBO/cardano-node/master";
     };
     cardano-wallet = {
       url = "github:cardano-foundation/cardano-wallet/v2024-11-18";
     };
     daedalus = {
-      url = "github:input-output-hk/daedalus";
+      url = "github:input-output-hk/daedalus/6.0.2";
     };
   };
 
