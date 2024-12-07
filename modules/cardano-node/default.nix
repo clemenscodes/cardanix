@@ -68,7 +68,7 @@ in {
           postStart = ''
             while true; do
               if [ -S ${socketPath} ]; then
-                chmod go+w ${socketPath}
+                chmod 660 ${socketPath}
                 exit 0
               fi
               sleep 5
