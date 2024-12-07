@@ -51,7 +51,6 @@
             pkgs.cardano-cli
             pkgs.cardano-wallet
             pkgs.cardano-db-sync
-            pkgs.daedalus
           ];
         };
       };

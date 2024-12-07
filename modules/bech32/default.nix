@@ -1,17 +1,9 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config,
   lib,
   ...
 }: let
   cfg = config.cardano;
-  bech32Pkgs = import inputs.nixpkgs {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    overlays = [(import ../../overlays/bech32 {inherit inputs;})];
-  };
 in {
   options = {
     cardano = {
@@ -23,7 +15,7 @@ in {
   config = lib.mkIf (cfg.enable && cfg.cli.enable) {
     environment = {
       systemPackages = [
-        bech32Pkgs.bech32
+        pkgs.bech32
       ];
     };
   };

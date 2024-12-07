@@ -1,17 +1,9 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config,
   lib,
   ...
 }: let
   cfg = config.cardano;
-  addressPkgs = import inputs.nixpkgs {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    overlays = [(import ../../overlays/cardano-addresses {inherit inputs;})];
-  };
 in {
   options = {
     cardano = {
@@ -23,7 +15,7 @@ in {
   config = lib.mkIf (cfg.enable && cfg.address.enable) {
     environment = {
       systemPackages = [
-        addressPkgs.cardano-address
+        pkgs.cardano-address
       ];
     };
   };

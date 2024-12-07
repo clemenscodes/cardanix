@@ -16,10 +16,6 @@
     chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDirBase}
     chmod -R 0755 ${config.services.cardano-node.stateDirBase}
   '';
-  nodePkgs = import inputs.nixpkgs {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    overlays = [(import ../../overlays/cardano-node {inherit inputs;})];
-  };
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {
@@ -36,7 +32,7 @@ in {
   config = lib.mkIf (cfg.enable && cfg.node.enable) {
     environment = {
       systemPackages = [
-        nodePkgs.cardano-node
+        pkgs.cardano-node
       ];
       variables = {
         CARDANO_NODE_SOCKET_PATH = socketPath;

@@ -22,10 +22,6 @@
     chown -R cardano-node:cardano-node ${stateDirBase}${config.services.cardano-wallet.database}
     chmod -R 0755 ${stateDirBase}${config.services.cardano-wallet.database}
   '';
-  walletPkgs = import inputs.nixpkgs {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    overlays = [(import ../../overlays/cardano-wallet {inherit inputs;})];
-  };
 in {
   imports = ["${inputs.cardano-wallet}/nix/nixos"];
   options = {
@@ -37,7 +33,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.node.enable && cfg.wallet.enable) {
     environment = {
-      systemPackages = [walletPkgs.cardano-wallet];
+      systemPackages = [pkgs.cardano-wallet];
       variables = {
         STATE_DIRECTORY = walletHome;
         STATE_DIR = walletHome;

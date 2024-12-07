@@ -8,10 +8,6 @@
   ...
 }: let
   cfg = config.cardano;
-  dbSyncPkgs = import inputs.nixpkgs {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    overlays = [(import ../../overlays/cardano-db-sync {inherit inputs;})];
-  };
 in {
   imports = ["${inputs.cardano-db-sync}/nix/nixos"];
   options = {
@@ -24,7 +20,7 @@ in {
   config = lib.mkIf (cfg.enable && cfg.db-sync.enable) {
     environment = {
       systemPackages = [
-        dbSyncPkgs.cardano-db-sync
+        pkgs.cardano-db-sync
       ];
     };
     services = {

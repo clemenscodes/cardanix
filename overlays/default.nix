@@ -5,5 +5,4 @@
   (import ./cardano-cli {inherit inputs;})
   (import ./cardano-wallet {inherit inputs;})
   (import ./cardano-db-sync {inherit inputs;})
-  (import ./daedalus {inherit inputs;})
 ]
