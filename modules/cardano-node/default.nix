@@ -58,6 +58,7 @@ in {
     services = {
       cardano-node = {
         inherit (cfg.node) enable environment;
+        package = pkgs.cardano-node;
         hostAddr = "0.0.0.0";
         useNewTopology = true;
       };
