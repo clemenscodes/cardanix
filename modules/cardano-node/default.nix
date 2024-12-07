@@ -44,7 +44,7 @@ in {
       cardano-node = {
         inherit (cfg.node) enable environment;
         hostAddr = "0.0.0.0";
-        useNewTopology = true;
+        useNewTopology = false;
         systemdSocketActivation = true;
       };
       cardano-submit-api = {
