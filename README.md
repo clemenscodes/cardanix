@@ -99,7 +99,7 @@ After adding the overlay, you will have access to various components.
       in {
         nixosModules = {
           default = {inputs, ...}: {
-            imports = [inputs.cardanix.nixosModules.${system}]
+            imports = [inputs.cardanix.nixosModules.${system}];
             cardano = {
               enable = true;
               bech32 = {
