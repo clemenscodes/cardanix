@@ -145,7 +145,7 @@ in {
             RestartSec = 1;
             WorkingDirectory = walletHome;
             ExecStart = config.services.cardano-wallet.command;
-            StateDirectory = lib.removePrefix "${stateDirBase}${config.services.cardano-wallet.database}" walletHome;
+            StateDirectory = lib.removePrefix "${stateDirBase}${config.services.cardano-wallet.database}/" walletHome;
           };
           postStart = ''
             while true; do
