@@ -27,12 +27,12 @@
     current_owner=$(stat -c '%U:%G' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
 
     if [ "$current_owner" != "cardano-node:cardano-node" ]; then
-    chown -R cardano-node:cardano-node ${stateDirBase}${config.services.cardano-wallet.database}
+      chown -R cardano-node:cardano-node ${stateDirBase}${config.services.cardano-wallet.database}
     fi
 
     current_perms=$(stat -c '%a' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
-    if [ "$current_perms" != "755" ]; then
-      chmod -R 0755 ${stateDirBase}${config.services.cardano-wallet.database}
+    if [ "$current_perms" != "775" ]; then
+      chmod -R 0775 ${stateDirBase}${config.services.cardano-wallet.database}
     fi
   '';
 in {
@@ -142,7 +142,6 @@ in {
             User = "cardano-node";
             Group = "cardano-node";
             TimeoutStartSec = "infinity";
-            Restart = "always";
             RestartSec = 1;
             WorkingDirectory = walletHome;
             ExecStart = config.services.cardano-wallet.command;
