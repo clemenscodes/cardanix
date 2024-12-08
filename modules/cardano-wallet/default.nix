@@ -9,7 +9,7 @@
 }: let
   cfg = config.cardano;
   inherit (config.services) cardano-node;
-  inherit (cardano-node) nodeId stateDirBase;
+  inherit (cardano-node) stateDirBase;
   inherit
     (inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment})
     networkConfig
@@ -56,7 +56,7 @@ in {
         inherit (cfg.wallet) enable;
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
-        nodeSocket = socketPath nodeId;
+        nodeSocket = socketPath;
         walletMode =
           if cfg.node.environment == "mainnet"
           then "mainnet"
