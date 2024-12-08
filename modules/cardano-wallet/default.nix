@@ -9,13 +9,14 @@
 }: let
   cfg = config.cardano;
   inherit (config.services) cardano-node;
-  inherit (cardano-node) nodeId socketPath stateDirBase;
+  inherit (cardano-node) nodeId stateDirBase;
   inherit
     (inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment})
     networkConfig
     metadataUrl
     smashUrl
     ;
+  socketPath = config.services.cardano-node.socketPath config.services.cardano-node.nodeId;
   walletHome = "${stateDirBase}${config.services.cardano-wallet.database}/${cfg.node.environment}";
   cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
     if [ ! -d "${walletHome}" ]; then
