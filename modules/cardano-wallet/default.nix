@@ -56,7 +56,6 @@ in {
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath nodeId;
-        database = walletHome;
         walletMode =
           if cfg.node.environment == "mainnet"
           then "mainnet"
@@ -75,7 +74,8 @@ in {
     systemd = {
       services = {
         cardano-wallet-fs = {
-          after = ["cardano-node.service"];
+          after = ["local-fs.target" "cardano-node.service"];
+          before = ["cardano-wallet.service"];
           wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
@@ -84,9 +84,8 @@ in {
         };
         cardano-wallet = {
           after = ["cardano-node.service"];
-          wantedBy = ["multi-user.target"];
           serviceConfig = {
-            DynamicUser = lib.mkForce "no";
+            DynamicUser = lib.mkForce null;
             WorkingDirectory = walletHome;
             User = "cardano-node";
             Group = "cardano-node";
