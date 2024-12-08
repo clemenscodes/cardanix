@@ -19,12 +19,12 @@
     current_owner=$(stat -c '%U:%G' "${config.services.cardano-node.stateDirBase}" 2>/dev/null)
 
     if [ "$current_owner" != "cardano-node:cardano-node" ]; then
-      chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDirBase}
+      chown -R cardano-node:cardano-node ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
     fi
 
-    current_perms=$(stat -c '%a' "${config.services.cardano-node.stateDirBase}" 2>/dev/null)
+    current_perms=$(stat -c '%a' "${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}" 2>/dev/null)
     if [ "$current_perms" != "775" ]; then
-        chmod -R 0775 ${config.services.cardano-node.stateDirBase}
+        chmod -R 0775 ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
     fi
 
     if [ -S ${socketPath} ]; then
