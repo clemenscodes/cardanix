@@ -1,6 +1,6 @@
 {inputs, ...}: final: prev: {
   inherit
-    (inputs.cardano-node.legacyPackages.${prev.stdenv.hostPlatform.system})
+    (inputs.cardano-wallet.packages.${prev.stdenv.hostPlatform.system})
     bech32
     ;
 }
