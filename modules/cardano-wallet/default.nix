@@ -94,7 +94,7 @@ in {
           ++ lib.optionals (walletCfg.tokenMetadataServer != null)
           ["--token-metadata-server" walletCfg.tokenMetadataServer]
           ++ lib.optionals (walletCfg.database != null)
-          ["--database" walletCfg.database]
+          ["--database" walletHome]
           ++ lib.mapAttrsToList
           (name: level: "--trace-${name}=${level}")
           walletCfg.trace
@@ -107,7 +107,6 @@ in {
           ++ lib.optionals (walletCfg.rtsOpts != "") ["+RTS" walletCfg.rtsOpts "-RTS"]);
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath;
-        database = walletHome;
         listenAddress = "0.0.0.0";
         walletMode =
           if cfg.node.environment == "mainnet"
@@ -147,7 +146,7 @@ in {
             RestartSec = 1;
             WorkingDirectory = walletHome;
             ExecStart = config.services.cardano-wallet.command;
-            StateDirectory = lib.removePrefix stateDirBase config.services.cardano-wallet.database;
+            StateDirectory = lib.removePrefix "${stateDirBase}${config.services.cardano-wallet.database}" walletHome;
           };
           postStart = ''
             while true; do
@@ -171,10 +170,6 @@ in {
         message = ''          The option services.cardano-wallet.genesisFile must be set
                   if, and only if, services.cardano-wallet.walletMode is not \"mainnet\".
         '';
-      }
-      {
-        assertion = lib.hasPrefix stateDirBase walletCfg.database;
-        message = "The option services.cardano-node.database should be a relative path (of ${stateDirBase}).";
       }
     ];
   };
