@@ -56,6 +56,10 @@ in {
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath nodeId;
+        walletMode =
+          if cfg.node.environment == "mainnet"
+          then "mainnet"
+          else "testnet";
         genesisFile =
           if cfg.node.environment != "mainnet"
           then networkConfig.ByronGenesisFile
