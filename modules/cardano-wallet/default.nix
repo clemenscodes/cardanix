@@ -8,6 +8,7 @@
   ...
 }: let
   cfg = config.cardano;
+  walletCfg = config.services.cardano-wallet;
   inherit (config.services) cardano-node;
   inherit (cardano-node) stateDirBase;
   inherit
@@ -54,9 +55,60 @@ in {
     services = {
       cardano-wallet = {
         enable = lib.mkForce false;
-        listenAddress = "0.0.0.0";
+        serverArgs = lib.concatStringsSep " " (
+          # Only specify arguments if they have different value than the default:
+          lib.optionals (walletCfg.listenAddress != "127.0.0.1") [
+            "--listen-address"
+            (lib.escapeShellArg walletCfg.listenAddress)
+          ]
+          ++ lib.optionals (walletCfg.port != 8090) [
+            "--port"
+            (toString walletCfg.port)
+          ]
+          ++ lib.optionals (walletCfg.logLevel != "DEBUG") [
+            "--log-level"
+            walletCfg.logLevel
+          ]
+          ++ lib.optionals (walletCfg.syncTolerance != 300) [
+            "--sync-tolerance"
+            "${toString walletCfg.syncTolerance}s"
+          ]
+          ++ [
+            "--node-socket"
+            walletCfg.nodeSocket
+            "--pool-metadata-fetching"
+            (
+              if (walletCfg.poolMetadataFetching.enable)
+              then
+                (
+                  if walletCfg.poolMetadataFetching.smashUrl != null
+                  then walletCfg.poolMetadataFetching.smashUrl
+                  else "direct"
+                )
+              else "none"
+            )
+            "--${walletCfg.walletMode}"
+          ]
+          ++ lib.optional (walletCfg.walletMode != "mainnet")
+          (lib.escapeShellArg walletCfg.genesisFile)
+          ++ lib.optionals (walletCfg.tokenMetadataServer != null)
+          ["--token-metadata-server" walletCfg.tokenMetadataServer]
+          ++ lib.optionals (walletCfg.database != null)
+          ["--database" walletCfg.database]
+          ++ lib.mapAttrsToList
+          (name: level: "--trace-${name}=${level}")
+          walletCfg.trace
+        );
+        command = lib.concatStringsSep " " ([
+            (lib.getExe walletCfg.package)
+            "serve"
+            walletCfg.serverArgs
+          ]
+          ++ lib.optionals (walletCfg.rtsOpts != "") ["+RTS" walletCfg.rtsOpts "-RTS"]);
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath;
+        database = walletHome;
+        listenAddress = "0.0.0.0";
         walletMode =
           if cfg.node.environment == "mainnet"
           then "mainnet"
@@ -95,7 +147,7 @@ in {
             RestartSec = 1;
             WorkingDirectory = walletHome;
             ExecStart = config.services.cardano-wallet.command;
-            StateDirectory = config.services.cardano-wallet.database;
+            StateDirectory = lib.removePrefix stateDirBase config.services.cardano-wallet.database;
           };
           postStart = ''
             while true; do
@@ -112,5 +164,18 @@ in {
         };
       };
     };
+
+    assertions = [
+      {
+        assertion = (walletCfg.walletMode == "mainnet") == (walletCfg.genesisFile == null);
+        message = ''          The option services.cardano-wallet.genesisFile must be set
+                  if, and only if, services.cardano-wallet.walletMode is not \"mainnet\".
+        '';
+      }
+      {
+        assertion = lib.hasPrefix stateDirBase walletCfg.database;
+        message = "The option services.cardano-node.database should be a relative path (of ${stateDirBase}).";
+      }
+    ];
   };
 }
