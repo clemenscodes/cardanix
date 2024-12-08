@@ -53,7 +53,7 @@ in {
     };
     services = {
       cardano-wallet = {
-        inherit (cfg.wallet) enable;
+        enable = lib.mkForce false;
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath;
@@ -84,15 +84,18 @@ in {
           };
         };
         cardano-wallet = {
-          after = ["cardano-node.service"];
+          description = "cardano-wallet daemon";
+          after = ["cardano-node.service" "cardano-wallet-fs.service"];
+          wantedBy = ["multi-user.target"];
           serviceConfig = {
-            DynamicUser = lib.mkForce null;
-            WorkingDirectory = walletHome;
             User = "cardano-node";
             Group = "cardano-node";
             TimeoutStartSec = "infinity";
             Restart = "always";
             RestartSec = 1;
+            WorkingDirectory = walletHome;
+            ExecStart = config.services.cardano-wallet.command;
+            StateDirectory = config.services.cardano-wallet.database;
           };
           postStart = ''
             while true; do
