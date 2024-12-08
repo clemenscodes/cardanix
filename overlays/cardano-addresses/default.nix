@@ -1,3 +1,6 @@
 {inputs, ...}: final: prev: {
-  cardano-address = inputs.cardano-addresses.packages.${prev.stdenv.hostPlatform.system}."cardano-addresses-cli:exe:cardano-address";
+  inherit
+    (inputs.cardano-wallet.packages.${prev.stdenv.hostPlatform.system})
+    cardano-address
+    ;
 }
