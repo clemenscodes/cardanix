@@ -56,6 +56,7 @@ in {
         listenAddress = "0.0.0.0";
         package = pkgs.cardano-wallet;
         nodeSocket = socketPath nodeId;
+        database = walletHome;
         walletMode =
           if cfg.node.environment == "mainnet"
           then "mainnet"
@@ -93,6 +94,18 @@ in {
             Restart = "always";
             RestartSec = 1;
           };
+          postStart = ''
+            while true; do
+              if [ -S ${socketPath} ]; then
+                current_perms=$(stat -c '%a' "${socketPath}" 2>/dev/null)
+                if [ "$current_perms" != "660" ]; then
+                  chmod 660 ${socketPath}
+                  exit 0
+                fi
+              fi
+              sleep 5
+            done
+          '';
         };
       };
     };
