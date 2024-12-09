@@ -22,8 +22,6 @@
   cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
     if [ ! -d "${walletHome}" ]; then
       mkdir -p ${walletHome}
-      chown -R cardano-node:cardano-node ${walletHome}
-      chmod -R 0775 ${walletHome}
     fi
 
     current_owner=$(stat -c '%U:%G' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
@@ -35,6 +33,17 @@
     current_perms=$(stat -c '%a' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
     if [ "$current_perms" != "775" ]; then
       chmod -R 0775 ${stateDirBase}${config.services.cardano-wallet.database}
+    fi
+
+    current_owner=$(stat -c '%U:%G' "${walletHome}" 2>/dev/null)
+
+    if [ "$current_owner" != "cardano-node:cardano-node" ]; then
+      chown -R cardano-node:cardano-node ${walletHome}
+    fi
+
+    current_perms=$(stat -c '%a' "${walletHome}" 2>/dev/null)
+    if [ "$current_perms" != "775" ]; then
+      chmod -R 0775 ${walletHome}
     fi
   '';
 in {
