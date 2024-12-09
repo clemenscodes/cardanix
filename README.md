@@ -100,6 +100,12 @@ After adding the overlay, you will have access to various components.
         nixosModules = {
           default = {inputs, ...}: {
             imports = [inputs.cardanix.nixosModules.${system}];
+            services = {
+              cardano-node = {
+                stateDirBase = "/mnt/ext4/crypto/cardano/"; # Can be anywhere
+                runDirBase = "/mnt/ext4/crypto/cardano/"; # Can be anywhere
+              };
+            };
             cardano = {
               enable = true;
               bech32 = {
@@ -114,8 +120,6 @@ After adding the overlay, you will have access to various components.
               node = {
                 enable = true;
                 environment = "preview"; # mainnet by default
-                stateDirBase = "/var/lib/"; # Can be anywhere
-                runDirBase = "/run/"; # Can be anywhere
               };
               wallet = {
                 enable = true;
