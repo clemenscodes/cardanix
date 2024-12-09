@@ -24,7 +24,7 @@
 
     current_perms=$(stat -c '%a' "${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}" 2>/dev/null)
     if [ "$current_perms" != "775" ]; then
-        chmod -R 0775 ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
+      chmod -R 0775 ${config.services.cardano-node.stateDir config.services.cardano-node.nodeId}
     fi
 
     if [ -S ${socketPath} ]; then

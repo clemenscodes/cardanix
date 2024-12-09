@@ -22,6 +22,8 @@
   cardano-wallet-fs = pkgs.writeShellScriptBin "cardano-wallet-fs" ''
     if [ ! -d "${walletHome}" ]; then
       mkdir -p ${walletHome}
+      chown -R cardano-node:cardano-node ${walletHome}
+      chmod -R 0775 ${walletHome}
     fi
 
     current_owner=$(stat -c '%U:%G' "${stateDirBase}${config.services.cardano-wallet.database}" 2>/dev/null)
