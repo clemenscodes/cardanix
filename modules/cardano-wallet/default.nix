@@ -48,8 +48,7 @@ in {
     environment = {
       systemPackages = [pkgs.cardano-wallet];
       variables = {
-        STATE_DIRECTORY = walletHome;
-        STATE_DIR = walletHome;
+        WALLET_STATE_DIRECTORY = walletHome;
       };
     };
     services = {
