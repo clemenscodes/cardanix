@@ -15,7 +15,7 @@
       url = "github:cardano-foundation/cardano-wallet/v2024-11-18";
     };
     daedalus = {
-      url = "github:input-output-hk/daedalus/6.0.2";
+      url = "github:input-output-hk/daedalus/7.0.1";
     };
   };
 
