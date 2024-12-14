@@ -39,11 +39,11 @@ in {
         config = submitApiConfig;
         script = pkgs.writeShellScript "cardano-submit-api" ''
           exec ${lib.getExe config.services.cardano-submit-api.package} \
-            --socket-path "${config.services.submit-api.socketPath}" \
+            --socket-path "${config.services.cardano-submit-api.socketPath}" \
             --testnet-magic ${networkMagic} \
-            --port ${toString config.services.submit-api.port} \
-            --listen-address ${config.services.submit-api.listenAddress} \
-            --config ${builtins.toFile "submit-api.json" (builtins.toJSON config.services.submit-api.config)}
+            --port ${toString config.services.cardano-submit-api.port} \
+            --listen-address ${config.services.cardano-submit-api.listenAddress} \
+            --config ${builtins.toFile "submit-api.json" (builtins.toJSON config.services.cardano-submit-api.config)}
         '';
       };
     };
