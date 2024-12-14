@@ -21,15 +21,13 @@
 
   outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
-    overlays = import ./overlays {inherit inputs;};
+    overlays = import ./overlays {inherit inputs system;};
     pkgs = import nixpkgs {
       inherit system;
-      overlays = [] ++ overlays.default;
+      overlays = [overlays.default];
     };
   in {
-    overlays = {
-      ${system} = overlays;
-    };
+    inherit overlays;
     nixosModules = {
       ${system} = import ./modules {inherit inputs pkgs system;};
     };
@@ -39,10 +37,11 @@
           nativeBuildInputs = [
             pkgs.bech32
             pkgs.cardano-address
-            pkgs.cardano-node
             pkgs.cardano-cli
-            pkgs.cardano-wallet
             pkgs.cardano-db-sync
+            pkgs.cardano-node
+            pkgs.cardano-submit-api
+            pkgs.cardano-wallet
           ];
         };
       };
