@@ -9,7 +9,7 @@
 }: let
   cfg = config.cardano.node;
   socketPath = config.services.cardano-node.socketPath config.services.cardano-node.nodeId;
-  environment = inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.node.environment};
+  environment = inputs.cardano-node.environments.${pkgs.stdenv.hostPlatform.system}.${cfg.environment};
   inherit (environment) nodeConfig submitApiConfig;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile nodeConfig.ShelleyGenesisFile);
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
@@ -32,9 +32,10 @@ in {
     services = {
       cardano-submit-api = {
         enable = false;
-        inherit (config.cardano.wallet) port listenAddress;
         inherit socketPath environment;
-        network = cfg.node.environment;
+        listenAddress = config.services.cardano-node.hostAddr;
+        port = config.services.cardano-node.port + 1;
+        network = cfg.environment;
         package = cardano-submit-api;
         config = submitApiConfig;
         script = pkgs.writeShellScript "cardano-submit-api" ''
