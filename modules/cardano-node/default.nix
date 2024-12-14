@@ -38,7 +38,7 @@
 in {
   imports = [
     "${inputs.cardano-node}/nix/nixos"
-    ./cardano-submit-api
+    (import ./cardano-submit-api {inherit inputs pkgs;})
   ];
   options = {
     cardano = {
