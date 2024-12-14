@@ -23,14 +23,15 @@
     system = "x86_64-linux";
     overlays = import ./overlays {inherit inputs;};
     pkgs = import nixpkgs {
-      inherit system overlays;
+      inherit system;
+      overlays = [] ++ overlays.default;
     };
   in {
     overlays = {
       ${system} = overlays;
     };
     nixosModules = {
-      ${system} = import ./modules {inherit inputs pkgs;};
+      ${system} = import ./modules {inherit inputs pkgs system;};
     };
     devShells = {
       ${system} = {

@@ -1,9 +1,17 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   config,
   lib,
   ...
 }: let
   cfg = config.cardano;
+  inherit
+    (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
+    bech32
+    ;
 in {
   options = {
     cardano = {
@@ -14,9 +22,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.cli.enable) {
     environment = {
-      systemPackages = [
-        pkgs.bech32
-      ];
+      systemPackages = [bech32];
     };
   };
 }

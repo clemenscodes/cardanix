@@ -8,6 +8,7 @@
   ...
 }: let
   cfg = config.cardano;
+  cardano-db-sync = inputs.cardano-db-sync.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in {
   imports = ["${inputs.cardano-db-sync}/nix/nixos"];
   options = {
@@ -19,9 +20,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.db-sync.enable) {
     environment = {
-      systemPackages = [
-        pkgs.cardano-db-sync
-      ];
+      systemPackages = [cardano-db-sync];
     };
     services = {
       cardano-db-sync = {
