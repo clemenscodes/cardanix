@@ -28,6 +28,22 @@
     };
   in {
     inherit overlays;
+    packages = {
+      ${system} = {
+        inherit
+          (pkgs)
+          bech32
+          cardano-address
+          cardano-cli
+          cardano-db-sync
+          cardano-node
+          cardano-scripts
+          cardano-submit-api
+          cardano-wallet
+          daedalus
+          ;
+      };
+    };
     nixosModules = {
       ${system} = import ./modules {inherit inputs pkgs system;};
     };
@@ -38,10 +54,12 @@
             pkgs.bech32
             pkgs.cardano-address
             pkgs.cardano-cli
-            pkgs.cardano-db-sync
-            pkgs.cardano-node
-            pkgs.cardano-submit-api
-            pkgs.cardano-wallet
+            # pkgs.cardano-db-sync
+            # pkgs.cardano-node
+            pkgs.cardano-scripts
+            # pkgs.cardano-submit-api
+            # pkgs.cardano-wallet
+            # pkgs.daedalus
           ];
         };
       };

@@ -12,8 +12,10 @@
     cardano-cli = import ./cardano-cli {inherit inputs;};
     cardano-db-sync = import ./cardano-db-sync {inherit inputs;};
     cardano-node = import ./cardano-node {inherit inputs;};
-    cardano-submit-api = import ./cardano-submit-api {inherit inputs;};
+    cardano-scripts = import ./cardano-scripts {inherit inputs system;};
+    cardano-submit-api = import ./cardano-node/cardano-submit-api {inherit inputs;};
     cardano-wallet = import ./cardano-wallet {inherit inputs;};
+    daedalus = import ./daedalus {inherit inputs;};
   };
 in {
   default = pkgs.lib.composeManyExtensions (builtins.attrValues overlays);
@@ -24,6 +26,7 @@ in {
     cardano-cli
     cardano-db-sync
     cardano-node
+    cardano-scripts
     cardano-submit-api
     cardano-wallet
     ;
