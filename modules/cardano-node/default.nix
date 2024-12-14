@@ -66,6 +66,7 @@ in {
         package = pkgs.cardano-node;
         hostAddr = "0.0.0.0";
         useNewTopology = true;
+        useLegacyTracing = false;
       };
     };
     systemd = {
