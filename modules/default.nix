@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  system,
   ...
 }: {lib, ...}: {
   imports = [
@@ -9,7 +10,7 @@
     (import ./cardano-cli {inherit inputs pkgs;})
     (import ./cardano-db-sync {inherit inputs pkgs;})
     (import ./cardano-node {inherit inputs pkgs;})
-    (import ./cardano-wallet {inherit inputs pkgs;})
+    (import ./cardano-wallet {inherit inputs pkgs system;})
     (import ./daedalus {inherit inputs pkgs;})
   ];
   options = {
