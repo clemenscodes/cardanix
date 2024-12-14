@@ -168,9 +168,7 @@ in {
     assertions = [
       {
         assertion = (walletCfg.walletMode == "mainnet") == (walletCfg.genesisFile == null);
-        message = ''          The option services.cardano-wallet.genesisFile must be set
-                  if, and only if, services.cardano-wallet.walletMode is not \"mainnet\".
-        '';
+        message = ''The option services.cardano-wallet.genesisFile must be set if, and only if, services.cardano-wallet.walletMode is not \"mainnet\".'';
       }
     ];
   };

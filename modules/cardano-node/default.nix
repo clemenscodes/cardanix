@@ -36,7 +36,10 @@
     cardano-node
     ;
 in {
-  imports = ["${inputs.cardano-node}/nix/nixos"];
+  imports = [
+    "${inputs.cardano-node}/nix/nixos"
+    ./cardano-submit-api
+  ];
   options = {
     cardano = {
       node = {
@@ -63,9 +66,6 @@ in {
         package = pkgs.cardano-node;
         hostAddr = "0.0.0.0";
         useNewTopology = true;
-      };
-      cardano-submit-api = {
-        enable = false;
       };
     };
     systemd = {
