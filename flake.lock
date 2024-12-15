@@ -494,6 +494,21 @@
         "type": "github"
       }
     },
+    "capkgs": {
+      "locked": {
+        "lastModified": 1734013436,
+        "narHash": "sha256-+pioin8Vt8iBv6DEDNyhEIE8gO7Hx4o+zFakjEAhBTI=",
+        "owner": "input-output-hk",
+        "repo": "capkgs",
+        "rev": "24e9b0d7eb0c7cead8d39854d6e46fbb48838f4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "input-output-hk",
+        "repo": "capkgs",
+        "type": "github"
+      }
+    },
     "cardano-automation": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -4629,6 +4644,7 @@
     },
     "root": {
       "inputs": {
+        "capkgs": "capkgs",
         "cardano-db-sync": "cardano-db-sync",
         "cardano-node": "cardano-node",
         "cardano-wallet": "cardano-wallet",

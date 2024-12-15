@@ -17,6 +17,9 @@
     daedalus = {
       url = "github:input-output-hk/daedalus/7.0.1";
     };
+    capkgs = {
+      url = "github:input-output-hk/capkgs";
+    };
   };
 
   outputs = {nixpkgs, ...} @ inputs: let
