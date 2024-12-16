@@ -8,10 +8,7 @@
   ...
 }: let
   cfg = config.cardano;
-  inherit
-    (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
-    cardano-address
-    ;
+  cardano-address = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-address-cardano-foundation-cardano-wallet-v2024-11-18-9eb5f59;
 in {
   options = {
     cardano = {

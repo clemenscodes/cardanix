@@ -1,6 +1,3 @@
 {inputs, ...}: final: prev: {
-  inherit
-    (inputs.cardano-node.packages.${prev.stdenv.hostPlatform.system})
-    cardano-submit-api
-    ;
+  cardano-submit-api = inputs.capkgs.packages.${prev.stdenv.hostPlatform.system}.cardano-submit-api-input-output-hk-cardano-node-10-1-3-36871ba;
 }

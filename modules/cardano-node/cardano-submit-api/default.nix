@@ -13,7 +13,7 @@
   inherit (environment) nodeConfig submitApiConfig;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile nodeConfig.ShelleyGenesisFile);
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
-  inherit (inputs.cardano-node.packages.${pkgs.stdenv.hostPlatform.system}) cardano-submit-api;
+  cardano-submit-api = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-submit-api-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {

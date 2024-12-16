@@ -35,7 +35,7 @@ After adding the overlay, you will have access to various components.
       perSystem = {system, ...}: let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [] ++ cardanix.overlays.${system};
+          overlays = [inputs.cardanix.overlays.default];
         };
       in {
         devShells = {

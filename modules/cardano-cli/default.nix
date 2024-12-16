@@ -8,10 +8,7 @@
   ...
 }: let
   cfg = config.cardano;
-  inherit
-    (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
-    cardano-cli
-    ;
+  cardano-cli = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-cli-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   options = {
     cardano = {

@@ -42,6 +42,7 @@
           cardano-node
           cardano-scripts
           cardano-submit-api
+          cardano-tracer
           cardano-wallet
           daedalus
           ;
@@ -57,12 +58,7 @@
             pkgs.bech32
             pkgs.cardano-address
             pkgs.cardano-cli
-            # pkgs.cardano-db-sync
-            # pkgs.cardano-node
             pkgs.cardano-scripts
-            # pkgs.cardano-submit-api
-            # pkgs.cardano-wallet
-            # pkgs.daedalus
           ];
         };
       };

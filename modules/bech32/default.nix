@@ -8,10 +8,7 @@
   ...
 }: let
   cfg = config.cardano;
-  inherit
-    (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
-    bech32
-    ;
+  bech32 = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.bech32-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   options = {
     cardano = {

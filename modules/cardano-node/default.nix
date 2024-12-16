@@ -31,10 +31,7 @@
       chmod 660 ${socketPath}
     fi
   '';
-  inherit
-    (inputs.cardano-wallet.packages.${pkgs.stdenv.hostPlatform.system})
-    cardano-node
-    ;
+  cardano-node = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-node-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   imports = [
     "${inputs.cardano-node}/nix/nixos"
