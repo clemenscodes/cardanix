@@ -4,13 +4,13 @@
   ...
 }:
 pkgs.writeShellScriptBin "create-payment-key" ''
-  VKEY="payment.vkey"
-  SKEY="payment.skey"
-  echo "Creating payment key with verification key $VKEY and signing key $SKEY"
+  PUBLIC_KEY="payment.vkey"
+  PRIVATE_KEY="payment.skey"
+  echo "Creating payment key with verification key $PUBLIC_KEY and signing key $PRIVATE_KEY"
   ${lib.getExe pkgs.cardano-cli} \
     latest \
     address \
     key-gen \
-    --verification-key-file $VKEY \
-    --signing-key-file $SKEY
+    --verification-key-file $PUBLIC_KEY \
+    --signing-key-file $PRIVATE_KEY
 ''
