@@ -13,7 +13,6 @@
   inherit (environment) nodeConfig submitApiConfig;
   shelleyGenesisFile = builtins.fromJSON (builtins.readFile nodeConfig.ShelleyGenesisFile);
   networkMagic = builtins.toString shelleyGenesisFile.networkMagic;
-  cardano-submit-api = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-submit-api-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   imports = ["${inputs.cardano-node}/nix/nixos"];
   options = {
@@ -27,7 +26,7 @@ in {
   };
   config = lib.mkIf (config.cardano.enable && cfg.enable && cfg.submit-api.enable) {
     environment = {
-      systemPackages = [cardano-submit-api];
+      systemPackages = [pkgs.cardano-submit-api];
     };
     services = {
       cardano-submit-api = {
@@ -36,7 +35,7 @@ in {
         listenAddress = config.services.cardano-node.hostAddr;
         port = config.services.cardano-node.port + 1;
         network = cfg.environment;
-        package = cardano-submit-api;
+        package = pkgs.cardano-submit-api;
         config = submitApiConfig;
         script = pkgs.writeShellScript "cardano-submit-api" ''
           exec ${lib.getExe config.services.cardano-submit-api.package} \

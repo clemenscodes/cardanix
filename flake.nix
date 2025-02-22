@@ -3,19 +3,17 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
+    cardano-node = {
+      url = "github:IntersectMBO/cardano-node/10.2.1";
+    };
+    cardano-wallet = {
+      url = "github:cardano-foundation/cardano-wallet/v2025-01-07";
+    };
     cardano-db-sync = {
       url = "github:IntersectMBO/cardano-db-sync/13.6.0.4";
     };
-    cardano-node = {
-      # master contains fix for custom state dirs
-      # TODO: lock to 10.2.0 as soon as it is released
-      url = "github:IntersectMBO/cardano-node/master";
-    };
-    cardano-wallet = {
-      url = "github:cardano-foundation/cardano-wallet/v2024-11-18";
-    };
     daedalus = {
-      url = "github:input-output-hk/daedalus/7.0.1";
+      url = "github:input-output-hk/daedalus/7.0.2";
     };
     capkgs = {
       url = "github:input-output-hk/capkgs";
@@ -44,7 +42,9 @@
           cardano-submit-api
           cardano-tracer
           cardano-wallet
+          cc-sign
           daedalus
+          orchestrator-cli
           ;
       };
     };
@@ -58,7 +58,14 @@
             pkgs.bech32
             pkgs.cardano-address
             pkgs.cardano-cli
+            pkgs.cardano-db-sync
+            pkgs.cardano-node
             pkgs.cardano-scripts
+            pkgs.cardano-submit-api
+            pkgs.cardano-tracer
+            pkgs.cardano-wallet
+            pkgs.cc-sign
+            pkgs.orchestrator-cli
           ];
         };
       };

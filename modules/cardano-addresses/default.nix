@@ -1,14 +1,9 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config,
   lib,
   ...
 }: let
   cfg = config.cardano;
-  cardano-address = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-address-cardano-foundation-cardano-wallet-v2024-11-18-9eb5f59;
 in {
   options = {
     cardano = {
@@ -19,7 +14,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.address.enable) {
     environment = {
-      systemPackages = [cardano-address];
+      systemPackages = [pkgs.cardano-address];
     };
   };
 }

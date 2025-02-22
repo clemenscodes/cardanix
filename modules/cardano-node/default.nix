@@ -31,7 +31,6 @@
       chmod 660 ${socketPath}
     fi
   '';
-  cardano-node = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.cardano-node-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   imports = [
     "${inputs.cardano-node}/nix/nixos"
@@ -50,7 +49,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.node.enable) {
     environment = {
-      systemPackages = [cardano-node];
+      systemPackages = [pkgs.cardano-node];
       variables = {
         CARDANO_NODE_SOCKET_PATH = socketPath;
         CARDANO_NODE_NETWORK_ID = networkMagic;

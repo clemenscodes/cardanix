@@ -1,16 +1,12 @@
 {
   inputs,
-  system,
+  pkgs,
   ...
 }: {
   config,
   lib,
   ...
 }: let
-  pkgs = import inputs.nixpkgs {
-    inherit system;
-    overlays = [inputs.cardano-wallet.overlay];
-  };
   cfg = config.cardano;
   walletCfg = config.services.cardano-wallet;
   inherit (config.services) cardano-node;

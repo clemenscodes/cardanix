@@ -1,14 +1,9 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config,
   lib,
   ...
 }: let
   cfg = config.cardano;
-  bech32 = inputs.capkgs.packages.${pkgs.stdenv.hostPlatform.system}.bech32-input-output-hk-cardano-node-10-1-3-36871ba;
 in {
   options = {
     cardano = {
@@ -19,7 +14,7 @@ in {
   };
   config = lib.mkIf (cfg.enable && cfg.cli.enable) {
     environment = {
-      systemPackages = [bech32];
+      systemPackages = [pkgs.bech32];
     };
   };
 }

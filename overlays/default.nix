@@ -16,7 +16,9 @@
     cardano-submit-api = import ./cardano-node/cardano-submit-api {inherit inputs;};
     cardano-tracer = import ./cardano-node/cardano-tracer {inherit inputs;};
     cardano-wallet = import ./cardano-wallet {inherit inputs;};
+    cc-sign = import ./cc-sign {inherit inputs;};
     daedalus = import ./daedalus {inherit inputs;};
+    orchestrator-cli = import ./orchestrator-cli {inherit inputs;};
   };
 in {
   default = pkgs.lib.composeManyExtensions (builtins.attrValues overlays);
@@ -31,5 +33,7 @@ in {
     cardano-submit-api
     cardano-tracer
     cardano-wallet
+    cc-sign
+    orchestrator-cli
     ;
 }
