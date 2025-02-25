@@ -10,14 +10,14 @@
     bech32 = import ./bech32 {inherit inputs;};
     cardano-addresses = import ./cardano-addresses {inherit inputs;};
     cardano-cli = import ./cardano-cli {inherit inputs;};
-    cardano-db-sync = import ./cardano-db-sync {inherit inputs;};
+    # cardano-db-sync = import ./cardano-db-sync {inherit inputs;};
     cardano-node = import ./cardano-node {inherit inputs;};
     cardano-scripts = import ./cardano-scripts {inherit inputs system;};
     cardano-submit-api = import ./cardano-node/cardano-submit-api {inherit inputs;};
     cardano-tracer = import ./cardano-node/cardano-tracer {inherit inputs;};
-    cardano-wallet = import ./cardano-wallet {inherit inputs;};
+    # cardano-wallet = import ./cardano-wallet {inherit inputs;};
     cc-sign = import ./cc-sign {inherit inputs;};
-    daedalus = import ./daedalus {inherit inputs;};
+    # daedalus = import ./daedalus {inherit inputs;};
     orchestrator-cli = import ./orchestrator-cli {inherit inputs;};
   };
 in {
@@ -32,7 +32,7 @@ in {
     cardano-scripts
     cardano-submit-api
     cardano-tracer
-    cardano-wallet
+    # cardano-wallet
     cc-sign
     orchestrator-cli
     ;
